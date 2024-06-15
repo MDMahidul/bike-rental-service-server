@@ -25,6 +25,18 @@ const createRentalIntoDB = async (payload: TBooking, userData: JwtPayload) => {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
   }
 
+  // check if user has an active rental
+  const userActiveRental = await Booking.findOne({
+    userId: user._id,
+    isReturned: false,
+  });
+  if (userActiveRental) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'User already has an active rental!',
+    );
+  }
+
   // Create the booking
   const booking = new Booking({
     ...payload,
