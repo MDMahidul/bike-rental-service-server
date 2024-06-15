@@ -11,6 +11,17 @@ const createBikeValidationSchema = z.object({
   brand: z.string({required_error:'Bike brand is required!'}),
 });
 
+const updateBikeValidationSchema = z.object({
+  name: z.string().trim().optional(),
+  description: z.string().trim().optional(),
+  pricePerHour: z.number().optional(),
+  cc: z.number().optional(),
+  year: z.number().optional(),
+  model: z.string().optional(),
+  brand: z.string().optional(),
+});
+
 export const bikeValidations = {
   createBikeValidationSchema,
+  updateBikeValidationSchema,
 };

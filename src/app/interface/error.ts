@@ -9,3 +9,9 @@ export type TGenericErrorResponse = {
   message: string;
   errorMessages: TErrorMessages;
 };
+
+export type TNotFound = {
+  statusCode: number;
+  message: string;
+  data: null;
+};
