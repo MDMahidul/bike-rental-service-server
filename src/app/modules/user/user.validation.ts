@@ -13,6 +13,18 @@ const createUserValidationSchema = z.object({
   }),
 });
 
+const updateUserValidationSchema = z.object({
+  body: z.object({
+    name: z.string().trim().optional(),
+    email: z
+      .string()
+      .email({ message: 'Invalid email address' }).optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+  }),
+});
+
 export const userValidations = {
   createUserValidationSchema,
+  updateUserValidationSchema,
 };
