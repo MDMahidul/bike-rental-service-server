@@ -14,14 +14,14 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
     // Check if the token is sent correctly
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
     }
 
     const token = authHeader.split(' ')[1];
 
     // check if the token sent from client
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
     }
 
     // check if the token is valid
@@ -40,7 +40,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     if (requiredRoles && !requiredRoles.includes(role)) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
     }
 
     req.user = decoded as JwtPayload;
