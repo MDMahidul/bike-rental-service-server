@@ -73,10 +73,12 @@ const returnRental = async (id: string) => {
 
   // now calculate the total cost
   const returnTime = new Date();
-  const durationHours = Number((
-    (returnTime.getTime() - rental.startTime.getTime()) /
-    (1000 * 3600)
-  ).toFixed(2));
+  const durationHours = Number(
+    (
+      (returnTime.getTime() - rental.startTime.getTime()) /
+      (1000 * 3600)
+    ).toFixed(2),
+  );
 
   const totalCost = (durationHours * bike.pricePerHour).toFixed(2);
 
@@ -92,4 +94,24 @@ const returnRental = async (id: string) => {
 
   return rental;
 };
-export const BookingServices = { createRentalIntoDB, returnRental };
+
+const getAllRentalsFromDB = async (userData: JwtPayload) => {
+  const user = await User.findOne({ email: userData.userEmail });
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+  }
+
+  const result = await Booking.find({ userId: user._id });
+
+  if(!result){
+    throw new AppError(httpStatus.NOT_FOUND,'No data found for this user')
+  }
+
+  return result;
+};
+export const BookingServices = {
+  createRentalIntoDB,
+  returnRental,
+  getAllRentalsFromDB,
+};

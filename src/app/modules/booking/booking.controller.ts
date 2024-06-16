@@ -26,4 +26,15 @@ const returnBike = catchAsync(async (req, res) => {
   });
 });
 
-export const BookingControllers = { createNewBooking, returnBike };
+const getAllRental = catchAsync(async (req, res) => {
+  const rental = await BookingServices.getAllRentalsFromDB(req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Rentals retrieved successfully',
+    data: rental,
+  });
+});
+
+export const BookingControllers = { createNewBooking, returnBike, getAllRental };
