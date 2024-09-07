@@ -20,7 +20,7 @@ router.put(
   validateRequest(bikeValidations.updateBikeValidationSchema),
   BikeControllers.updateSingleBike,
 );
-
+ 
 router.delete('/:id', auth(USER_ROLE.superAdmin,USER_ROLE.admin), BikeControllers.deleteSingleBike);
 
 router.get('/available-bikes', BikeControllers.getAvailableBikes);
