@@ -1,22 +1,22 @@
+/* eslint-disable no-unused-vars */
 import { Model } from "mongoose";
 
-export type TBike= {
+export type TBike = {
   name: string;
   description: string;
   pricePerHour: number;
   isAvailable: boolean;
   cc: number;
-  year: number;
-  model:string;
-  brand:string;
+  year: string;
+  model: string;
+  brand: string;
+  isDeleted: boolean;
+  mileage:string;
+  image?: string;
 };
 
 // function defination
 export interface BikeModel extends Model<TBike> {
-  isBikeExists(id: string): Promise<TBike>;
+  isBikeExists(id: string): Promise<boolean>;
 
-  isPasswordMatched(
-    plainTextPassword: string,
-    hashedPassword: string,
-  ): Promise<boolean>;
 }

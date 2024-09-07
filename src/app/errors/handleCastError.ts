@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import { TErrorMessages, TGenericErrorResponse } from '../interface/error';
+import { TErrorSources, TGenereicErrorResponse } from '../interface/error';
 
 const handleCastError = (
   err: mongoose.Error.CastError,
-): TGenericErrorResponse => {
-  const errorMessages: TErrorMessages = [
+): TGenereicErrorResponse => {
+  const errorSources: TErrorSources = [
     {
       path: err?.path,
       message: err?.message,
@@ -15,8 +15,8 @@ const handleCastError = (
 
   return {
     statusCode,
-    message: 'No Data Found',
-    errorMessages,
+    message: 'Invalid ID!',
+    errorSources,
   };
 };
 export default handleCastError;

@@ -1,13 +1,13 @@
 // create an array of object
-export type TErrorMessages = {
+export type TErrorSources = {
   path: string | number;
   message: string;
 }[];
 
-export type TGenericErrorResponse = {
+export type TGenereicErrorResponse = {
   statusCode: number;
   message: string;
-  errorMessages: TErrorMessages;
+  errorSources: TErrorSources;
 };
 
 export type TNotFound = {

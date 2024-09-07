@@ -1,4 +1,3 @@
-// class for handle errors and show messages
 class AppError extends Error {
   public statusCode: number;
 

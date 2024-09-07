@@ -7,8 +7,45 @@ import { userValidations } from './user.validation';
 
 const router = express.Router();
 
-router.get('/me', auth('admin', 'user'), UserControllers.getUserProfile);
+router.post(
+  '/user-signup',
+  validateRequest(userValidations.createUserValidationSchema),
+  UserControllers.createUser,
+);
 
-router.put('/me', auth('admin', 'user'),validateRequest(userValidations.updateUserValidationSchema), UserControllers.updateUserProfile);
+router.get(
+  '/',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  UserControllers.getAllUsers,
+);
+
+// Specific routes for the current user
+router.get(
+  '/me',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.user),
+  UserControllers.getUserProfile,
+);
+
+router.put(
+  '/me',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.user),
+  validateRequest(userValidations.updateUserValidationSchema),
+  UserControllers.updateUserProfile,
+);
+
+// General routes for user management
+router.patch(
+  '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  UserControllers.changeUserRole,
+);
+
+router.delete(
+  '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  UserControllers.deleteUser,
+);
+
+
 
 export const UserRouters = router;

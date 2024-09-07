@@ -1,17 +1,32 @@
 import express from 'express';
 import { AuthControllers } from './auth.controller';
 import validateRequest from '../../middlewares/validateRequest';
-import { userValidations } from '../user/user.validation';
-import { AuthVlidation } from './auth.validation';
+import { AuthValidation } from './auth.validation';
 
 const router = express.Router();
 
-router.post('/signup',validateRequest(userValidations.createUserValidationSchema), AuthControllers.createUser);
-
 router.post(
   '/login',
-  validateRequest(AuthVlidation.loginValidationSchema),
+  validateRequest(AuthValidation.loginValidationSchema),
   AuthControllers.loginUser,
+);
+
+router.post(
+  '/refresh-token',
+  validateRequest(AuthValidation.refreshTokenValidationSchema),
+  AuthControllers.refreshToken,
+);
+
+router.post(
+  '/forget-password',
+  validateRequest(AuthValidation.forgetPasswordValidationSchema),
+  AuthControllers.forgetPassword,
+);
+
+router.post(
+  '/reset-password',
+  validateRequest(AuthValidation.resetPasswordValidationSchema),
+  AuthControllers.resetPassword,
 );
 
 export const AuthRouters = router;

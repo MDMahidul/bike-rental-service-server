@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { AnyZodObject } from 'zod';
+import { AnyObject } from 'mongoose';
 import catchAsync from '../utils/catchAsync';
 
-/* middleware */
-const validateRequest = (schema: AnyZodObject) => {
+const validateRequest = (schema: AnyObject) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    //validation
-    //zod validation schema
+    // zod parse data
     await schema.parseAsync({
       body: req.body,
       cookies: req.cookies,
