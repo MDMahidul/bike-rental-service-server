@@ -27,13 +27,14 @@ const returnBike = catchAsync(async (req, res) => {
 });
 
 const getAllRental = catchAsync(async (req, res) => {
-  const rental = await BookingServices.getAllRentalsFromDB(req.user);
+  const result = await BookingServices.getAllRentalsFromDB(req.query, req.user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Rentals retrieved successfully',
-    data: rental,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

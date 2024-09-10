@@ -4,6 +4,7 @@ import { UserRouters } from '../modules/user/user.routes';
 import { BikeRouters } from '../modules/bike/bike.routes';
 import { BookingRouters } from '../modules/booking/booking.routes';
 import { CouponRouters } from '../modules/coupon/coupon.routes';
+import { paymentRoutes } from '../modules/payment/payment.routes';
 
 const router = Router();
 
@@ -27,6 +28,10 @@ const modeleRoutes = [
   {
     path: '/coupons',
     route: CouponRouters,
+  },
+  {
+    path: '/payment',
+    route: paymentRoutes,
   },
 ];
 

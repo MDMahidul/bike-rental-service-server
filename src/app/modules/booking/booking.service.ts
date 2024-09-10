@@ -5,27 +5,21 @@ import { TBooking } from './booking.interface';
 import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../user/user.model';
 import { Booking } from './booking.model';
+import { initiatePayment } from '../payment/payment.utils';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { bookingSearchableFields } from './booking.constant';
 
 const createRentalIntoDB = async (payload: TBooking, userData: JwtPayload) => {
-  const { bikeId, startTime } = payload;
-
-  // Check if bike exists and isavailable
-  const bike = await Bike.findById(bikeId);
-  if (!bike) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Bike not found!');
-  }
-  if (!bike.isAvailable) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Bike is not available!');
-  }
+  const { bikeId, totalCost } = payload;
 
   // Check if user exists
-  const { userEmail } = userData;
-  const user = await User.findOne({ email: userEmail });
+  const { email } = userData;
+  const user = await User.findOne({ email });
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
   }
 
-  // check if user has an active rental
+  // Check if user has an active rental
   const userActiveRental = await Booking.findOne({
     userId: user._id,
     isReturned: false,
@@ -37,19 +31,62 @@ const createRentalIntoDB = async (payload: TBooking, userData: JwtPayload) => {
     );
   }
 
-  // Create the booking
+  // Check if bike exists and is available
+  const bike = await Bike.findById(bikeId);
+  if (!bike) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Bike not found!');
+  }
+  if (!bike.isAvailable) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Bike is not available!');
+  }
+
+  // Prepare payment data
+  const transactionId = `TXN-${Date.now()}`;
+  const paymentData = {
+    transactionId,
+    totalCost,
+    customerName: user.name,
+    customerEmail: user.email,
+    customerAddress: user.address,
+    customerPhone: user.contactNo,
+  };
+
+  // Initiate payment
+  let paymentSession;
+  try {
+    paymentSession = await initiatePayment(paymentData);
+  } catch (error) {
+    throw new AppError(
+      httpStatus.PAYMENT_REQUIRED,
+      'Payment initiation failed!',
+    );
+  }
+
+  // Payment successful, create the booking and update bike status
   const booking = new Booking({
     ...payload,
+    transactionId,
     userId: user._id,
   });
 
-  // Update bike availability to false
-  await Bike.findByIdAndUpdate(bikeId, { isAvailable: false }, { new: true });
+  try {
+    // Save booking after payment success
+    await booking.save();
 
-  const result = await booking.save();
+    // Update bike availability to false
+    await Bike.findByIdAndUpdate(bikeId, { isAvailable: false }, { new: true });
+  } catch (error) {
+    // In case of error, log the issue and ensure bike availability is not changed
+    console.error('Booking creation failed:', error);
+    throw new AppError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      'Booking creation failed after payment!',
+    );
+  }
 
-  return result;
+  return paymentSession;
 };
+
 
 const returnRental = async (id: string) => {
   // check the rental id
@@ -95,20 +132,25 @@ const returnRental = async (id: string) => {
   return rental;
 };
 
-const getAllRentalsFromDB = async (userData: JwtPayload) => {
-  const user = await User.findOne({ email: userData.userEmail });
+const getAllRentalsFromDB = async (query: Record<string, unknown>,userData: JwtPayload) => {
+  const user = await User.findOne({ email: userData.email });
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
   }
 
-  const result = await Booking.find({ userId: user._id });
+  const bookingQuery = new QueryBuilder(Booking.find(), query)
+    .search(bookingSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  if(!result){
-    throw new AppError(httpStatus.NOT_FOUND,'No data found for this user')
-  }
+  const meta = await bookingQuery.countTotal();
+  const result = await bookingQuery.modelQuery;
 
-  return result;
+  return { result, meta };
+
 };
 export const BookingServices = {
   createRentalIntoDB,

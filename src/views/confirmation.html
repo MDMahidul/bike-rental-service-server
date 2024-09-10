@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Payment Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+
+        div {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .primary-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #FF4C4C;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .primary-button:hover {
+            background-color: #fc2f2f;
+        }
+
+        .primary-button:active {
+            background-color: #003d80;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>{{message}}</h1>
+        <a class="primary-button" href="http://localhost:5173/dashboard">Go Back</a>
+    </div>
+</body>
+
+</html>

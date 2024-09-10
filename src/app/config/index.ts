@@ -16,4 +16,8 @@ export default {
   reset_pass_ui_link: process.env.RESET_PASS_UI_LINK,
   super_admin_password: process.env.SUPER_ADMIN_PASSWORD,
   super_admin_email: process.env.SUPER_ADMIN_EMAIL,
+  payment_url: process.env.PAYMENT_URL,
+  payment_verify_url: process.env.PAYMENT_VERIFY_URL,
+  store_id: process.env.STORE_ID,
+  signeture_key: process.env.SIGNETURE_KEY,
 };

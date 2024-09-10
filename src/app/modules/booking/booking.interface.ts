@@ -6,5 +6,9 @@ export type TBooking = {
   startTime: Date;
   returnTime: Date;
   totalCost: number;
+  isCouponUsed: boolean;
+  isAdvancePaid: boolean;
+  transactionId: string;
+  paymentStatus: string;
   isReturned: boolean;
 };
