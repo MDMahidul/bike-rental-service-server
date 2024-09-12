@@ -5,6 +5,7 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 
 export const initiatePayment = async (paymentData: any) => {
+  console.log(paymentData.transactionId);
   try {
     const response = await axios.post(config.payment_url!, {
       store_id: config.store_id,
@@ -27,7 +28,7 @@ export const initiatePayment = async (paymentData: any) => {
       cus_phone: paymentData.customerPhone,
       type: 'json',
     });
-    //console.log(response);
+    console.log(response);
     return response.data;
   } catch (error) {
     throw new AppError(httpStatus.BAD_GATEWAY, 'Payment initiation failed!');

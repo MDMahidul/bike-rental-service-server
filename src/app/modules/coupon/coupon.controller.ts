@@ -1,7 +1,7 @@
-import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { CouponServices } from "./coupon.service";
+import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { CouponServices } from './coupon.service';
 
 const createCoupon = catchAsync(async (req, res) => {
   const result = await CouponServices.createCouponIntoDB(req.body);
@@ -49,6 +49,8 @@ const deleteCoupon = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+
 
 export const CouponControllers = {
   createCoupon,

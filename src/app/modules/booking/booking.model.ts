@@ -13,8 +13,8 @@ const bookingSchema = new Schema<TBooking>({
   isCouponUsed: { type: Boolean, default: false },
   paymentStatus: {
     type: String,
-    enum: ['Pending', 'Paid', 'Failed'],
-    default: 'Pending',
+    enum: ['pending', 'paid', 'failed'],
+    default: 'pending',
   },
 });
 

@@ -55,4 +55,5 @@ export const CouponServices = {
   getAllCouponsFromDB,
   updateSingleCouponIntoDB,
   deleteCoupomIntoDB,
+  
 };

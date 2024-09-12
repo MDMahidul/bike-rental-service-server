@@ -18,6 +18,15 @@ const confirmationService = async (transactionId: string, status: string) => {
     if (!booking) {
       throw new AppError(httpStatus.NOT_FOUND, 'Booking not found!');
     }
+
+     /* Check if paymentStatus is already 'paid' */
+    if (booking.paymentStatus === 'paid') {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'Payment has already been completed!',
+      );
+    }
+
     if (!booking.isAdvancePaid) {
       result = await Booking.findOneAndUpdate(
         { transactionId },
@@ -30,7 +39,7 @@ const confirmationService = async (transactionId: string, status: string) => {
     } else {
       result = await Booking.findOneAndUpdate(
         { transactionId },
-        { paymentStatus: 'Paid' },
+        { paymentStatus: 'paid' },
         { new: true },
       );
       message = 'Payment Successfully!';
