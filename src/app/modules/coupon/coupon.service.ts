@@ -5,7 +5,22 @@ import { TCoupon } from './coupon.interface';
 import { Coupon } from './coupon.model';
 
 const createCouponIntoDB = async (payload: TCoupon) => {
+  // Check if there is already an active coupon
+  const activeCoupon = await Coupon.findOne({ isActive: true });
+
+  if (activeCoupon) {
+    throw new AppError(httpStatus.BAD_REQUEST,
+      'An active coupon already exists. You cannot create a new coupon.',
+    );
+  }
+
   const result = await Coupon.create(payload);
+
+  return result;
+};
+
+const getActiveCouponFromDB = async () => {
+  const result =await Coupon.find({ isActive: true,isDeleted: false })
 
   return result;
 };
@@ -55,5 +70,5 @@ export const CouponServices = {
   getAllCouponsFromDB,
   updateSingleCouponIntoDB,
   deleteCoupomIntoDB,
-  
+  getActiveCouponFromDB,
 };

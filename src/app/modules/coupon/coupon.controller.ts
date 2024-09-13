@@ -26,6 +26,17 @@ const getAllCoupons = catchAsync(async (req, res) => {
   });
 });
 
+const getActiveCoupon = catchAsync(async (req, res) => {
+  const result = await CouponServices.getActiveCouponFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Coupons retrieved successfully',
+    data:result,
+  });
+});
+
 const updateSingleCoupon = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await CouponServices.updateSingleCouponIntoDB(id, req.body);
@@ -57,4 +68,5 @@ export const CouponControllers = {
   getAllCoupons,
   updateSingleCoupon,
   deleteCoupon,
+  getActiveCoupon,
 };

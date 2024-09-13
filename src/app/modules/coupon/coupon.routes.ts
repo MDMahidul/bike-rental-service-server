@@ -19,6 +19,11 @@ router.get(
   CouponControllers.getAllCoupons,
 );
 
+router.get(
+  '/active-coupon',
+  CouponControllers.getActiveCoupon,
+);
+
 router.put(
   '/:id',
   auth(USER_ROLE.superAdmin, USER_ROLE.admin),

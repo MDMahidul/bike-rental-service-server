@@ -14,11 +14,6 @@ router.put(
   BookingControllers.returnBike,
 );
 
-router.get(
-  '/:id',
-  auth(USER_ROLE.user),
-  BookingControllers.getUserSingleRental,
-);
 
 router.get('/', auth(USER_ROLE.user), BookingControllers.getUserRental);
 
@@ -38,6 +33,12 @@ router.put(
   '/make-payment',
   auth(USER_ROLE.user),
   BookingControllers.makePayment,
+);
+
+router.get(
+  '/:id',
+  auth(USER_ROLE.user),
+  BookingControllers.getUserSingleRental,
 );
 
 export const BookingRouters = router;
