@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { TDiscountType } from './coupon.constant';
+import { DiscountType } from './coupon.constant';
 import { CouponModel, TCoupon } from './coupon.interface';
 
 const couponSchema = new Schema({
@@ -10,7 +10,7 @@ const couponSchema = new Schema({
   },
   discountType: {
     type: String,
-    enum: TDiscountType,
+    enum: DiscountType,
     required: true,
   },
   isDeleted: {

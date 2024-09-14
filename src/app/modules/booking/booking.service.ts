@@ -243,7 +243,7 @@ const applyCouponFromDB = async ({
 };
 
 const makeThePayemnt=async(payload:{id:string})=>{
-  const booking = await Booking.findById(payload.id).populate('userId');
+  const booking = await Booking.findById(payload.id);
   if (!booking) {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking data not found!');
   }
@@ -253,6 +253,9 @@ const makeThePayemnt=async(payload:{id:string})=>{
       'Payment has already been completed!',
     );
   }
+
+  const user = await User.findById(booking.userId);
+
   const newTransactionId = `TXN-${Date.now()}`;
   booking.transactionId = newTransactionId;
 
@@ -263,10 +266,10 @@ const makeThePayemnt=async(payload:{id:string})=>{
   const paymentData = {
     transactionId:newTransactionId,
     totalCost:booking.totalCost,
-    customerName: booking.userId.name,
-    customerEmail: booking.userId.email,
-    customerAddress: booking.userId.address,
-    customerPhone: booking.userId.contactNo,
+    customerName: user?.name,
+    customerEmail: user?.email,
+    customerAddress: user?.address,
+    customerPhone: user?.contactNo,
   };
   
   // Initiate payment
